@@ -11,7 +11,7 @@ export async function getArticles() {
   // TODO
   try {
     const [rows] = await pool.query(
-      "SELECT a.id, a.title, a.content, j.name as journalist, a.category \
+      "SELECT a.id, a.title, a.content, j.id as journalistId, j.name as journalist, a.category \
        FROM articles a\
        JOIN journalists j ON j.id = a.journalistId"
     );

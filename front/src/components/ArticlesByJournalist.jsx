@@ -1,27 +1,30 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { getArticles, removeArticle } from "../services/api";
+import { useEffect } from "react";
+import { useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { getArticlesByJournalist, removeArticle } from "../services/api";
 
-//
-// ArticleList component
-//
-export default function ArticleList() {
+export default function ArticlesByJournalist() {
+  const { id } = useParams()
   const [articles, setArticles] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
+  const [name, setName] = useState("")
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetchArticles(); // Fetch all articles when component mounts
-  }, []);
+    if (id) {
+        fetchArticlesByJournalist(id); // Fetch all articles when component mounts
+    }
+  }, [id]);
 
-  const fetchArticles = async () => {
+  const fetchArticlesByJournalist = async (id) => {
     setIsLoading(true);
     setError("");
     try {
-      const data = await getArticles();
+      const data = await getArticlesByJournalist(id);
       setArticles(data);
+      setName(data[0].journalist)
     } catch (err) {
       setError("Failed to load articles. Please try again.");
     } finally {
@@ -34,7 +37,7 @@ export default function ArticleList() {
     setError("");
     try {
       await removeArticle(id);
-      await fetchArticles(); // refresh the list
+      await fetchArticlesByJournalist(); // refresh the list
     } catch (err) {
       setError("Failed to delete article.");
     } finally {
@@ -44,7 +47,8 @@ export default function ArticleList() {
 
   const handleView = (id) => navigate(`/articles/${id}`);
 
-  const handleViewByJournalist = (id) => navigate(`/journalists/${id}`);
+  const handleViewByJournalist = (id) =>
+    navigate(`/journalists/${id}`);
 
   const handleEdit = (id) => navigate(`/articles/${id}/edit`);
 
@@ -52,7 +56,7 @@ export default function ArticleList() {
     <>
       {isLoading && <p>Loading...</p>}
       {error && <p style={{ color: "red" }}>{error}</p>}
-      
+      <div className="article-title">{name}</div>
       <div className="article-list">
         {articles.map((article) => (
           <ArticleCard
@@ -73,7 +77,12 @@ function ArticleCard({ article, onJournalist, onView, onEdit, onDelete }) {
   return (
     <div className="article-card">
       <div className="article-title">{article.title}</div>
-      <div className="article-author" onClick={() => onJournalist(article.journalistId)}>By {article.journalist}</div>
+      <div
+        className="article-author"
+        onClick={() => onJournalist(article.journalistId)}
+      >
+        By {article.journalist}
+      </div>
 
       <div className="article-actions">
         <button className="button-tertiary" onClick={() => onEdit(article.id)}>

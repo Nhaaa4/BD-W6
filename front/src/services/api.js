@@ -28,6 +28,15 @@ export const removeArticle = async (id) => {
   return response.data;
 };
 
+export const getJournalists = async () => {
+  const response = await axios.get(`${API_BASE_URL}/journalists`);
+  return response.data;
+};
+
+export const getArticlesByJournalist = async (journalistId) => {
+  const response = await axios.get(`${API_BASE_URL}/journalists/${journalistId}/articles`);
+  return response.data;
+};
 
 // OLD VERSION - MOCK
 

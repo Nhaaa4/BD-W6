@@ -65,12 +65,3 @@ export async function deleteArticle(req, res) {
     res.status(500).json({ message: "Server error" });
   }
 }
-
-export async function getArticleByJournalistId(req, res) {
-  try {
-    
-  } catch (error) {
-    console.error("Error fetching article by journalist:", error);
-    res.status(500).json({ message: "Server error" });
-  }
-}

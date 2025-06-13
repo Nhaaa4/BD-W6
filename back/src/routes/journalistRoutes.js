@@ -1,8 +1,9 @@
 import { Router } from 'express'
-import { getArticleByJournalistId } from '../controllers/articleController.js'
+import { getAllJournalists, getArticleByJournalistId } from '../controllers/journalistController.js'
 
 const journalistRoute = Router()
 
+journalistRoute.get('/', getAllJournalists)
 journalistRoute.get('/:id/articles', getArticleByJournalistId)
 
 export default journalistRoute

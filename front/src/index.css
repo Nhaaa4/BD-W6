@@ -87,7 +87,8 @@ form {
 }
 
 input,
-textarea {
+textarea,
+select {
   width: 100%;
 
   padding: 20px;
@@ -157,6 +158,8 @@ button:hover {
   font-size: 0.9em;
   color: #666;
   margin-bottom: 10px;
+  text-decoration: underline;
+  cursor: pointer;
 }
 
 .article-snippet {

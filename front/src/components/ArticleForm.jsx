@@ -1,10 +1,11 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { getArticleById, createArticle, updateArticle } from "../services/api";
+import { getArticleById, createArticle, updateArticle, getJournalists } from "../services/api";
 
 export default function ArticleForm({ isEdit }) {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [journalist,  setJournalist] = useState([])
 
   const [formData, setFormData] = useState({
     title: "",
@@ -20,6 +21,7 @@ export default function ArticleForm({ isEdit }) {
     if (isEdit && id) {
       fetchArticle(id);
     }
+    fetchJournalist()
   }, []);
 
   const fetchArticle = async (id) => {
@@ -34,6 +36,21 @@ export default function ArticleForm({ isEdit }) {
       setIsLoading(false);
     }
   };
+
+  const fetchJournalist = async () => {
+    setIsLoading(true);
+    setError("");
+    try {
+      const journalists = await getJournalists();
+      setJournalist(journalists);
+    } catch (err) {
+      setError("Failed to load article. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -81,13 +98,17 @@ export default function ArticleForm({ isEdit }) {
           required
         />
         <br />
-        <input
+        <select
           name="journalistId"
           value={formData.journalistId}
           onChange={handleChange}
           placeholder="Journalist ID"
           required
-        />
+        >
+          {journalist.map(journalist => 
+            <option>{journalist.id}</option>
+          )}
+        </select>
         <br />
         <input
           name="category"
