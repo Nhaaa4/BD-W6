@@ -5,8 +5,17 @@ import * as articleRepository from "../repositories/sqlArticleRepository.js";
 // GET /api/articles
 export async function getAllArticles(req, res) {
   try {
-    const articles = await articleRepository.getArticles();
-    res.json(articles);
+    let { categoryId, journalistId } = req.query;
+    if (categoryId) categoryId = parseInt(categoryId);
+    if (journalistId) journalistId = parseInt(journalistId);
+
+    if (categoryId && journalistId) {
+      const articles = await articleRepository.getArticleByCategoryAndJournalist(categoryId, journalistId)
+      res.json(articles);
+    } else {
+      const articles = await articleRepository.getArticles();
+      res.json(articles)
+    }
   } catch (error) {
     console.error("Error fetching articles:", error);
     res.status(500).json({ message: "Server error" });

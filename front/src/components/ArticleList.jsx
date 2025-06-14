@@ -1,19 +1,26 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getArticles, removeArticle } from "../services/api";
+import { getArticles, getJournalists, getCategories, removeArticle, getArticlesByJournalist, getArticlesByCategory, getArticlesByCategoryAndJournalist } from "../services/api";
 
 //
 // ArticleList component
 //
 export default function ArticleList() {
   const [articles, setArticles] = useState([]);
+  const [journalists, setJournalists] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
+
+  const [selectCategory, setSelectCategory] = useState("")
+  const [selectJournalist, setSelectJournalist] = useState("")
 
   const navigate = useNavigate();
 
   useEffect(() => {
     fetchArticles(); // Fetch all articles when component mounts
+    fetchJournalists()
+    fetchCategories()
   }, []);
 
   const fetchArticles = async () => {
@@ -21,6 +28,76 @@ export default function ArticleList() {
     setError("");
     try {
       const data = await getArticles();
+      setArticles(data);
+    } catch (err) {
+      setError("Failed to load articles. Please try again.");
+      console.error(err)
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const fetchJournalists = async () => {
+    setIsLoading(true);
+    setError("");
+    try {
+      const data = await getJournalists();
+      setJournalists(data);
+    } catch (err) {
+      setError("Failed to load articles. Please try again.");
+      console.error(err)
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const fetchCategories = async () => {
+    setIsLoading(true);
+    setError("");
+    try {
+      const data = await getCategories();
+      setCategories(data);
+    } catch (err) {
+      setError("Failed to load articles. Please try again.");
+      console.error(err)
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const fetchArticlesByJournalist = async (id) => {
+    setIsLoading(true);
+    setError("");
+    try {
+      const data = await getArticlesByJournalist(id);
+      setArticles(data);
+    } catch (err) {
+      setError("Failed to load articles. Please try again.");
+      console.error(err)
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const fetchArticlesByCategory = async (id) => {
+    setIsLoading(true);
+    setError("");
+    try {
+      const data = await getArticlesByCategory(id);
+      setArticles(data);
+    } catch (err) {
+      setError("Failed to load articles. Please try again.");
+      console.error(err)
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  
+  const fetchArticlesByCategoryAndJournalist = async (cId, jId) => {
+    setIsLoading(true);
+    setError("");
+    try {
+      const data = await getArticlesByCategoryAndJournalist(cId, jId);
       setArticles(data);
     } catch (err) {
       setError("Failed to load articles. Please try again.");
@@ -50,11 +127,52 @@ export default function ArticleList() {
 
   const handleEdit = (id) => navigate(`/articles/${id}/edit`);
 
+  const handleSelectCategory = (e) => {
+    setSelectCategory(e.target.value)
+  }
+
+  const handleSelectJournalist = (e) => {
+    setSelectJournalist(e.target.value)
+  }
+
+  const handleApply = () => {
+    if (selectCategory !== "" && selectJournalist !== "") {
+      fetchArticlesByCategoryAndJournalist(selectCategory, selectJournalist)
+    } else if (selectJournalist !== "") {
+      fetchArticlesByJournalist(Number(selectJournalist))
+    } else if (selectCategory !== "") {
+      fetchArticlesByCategory(Number(selectCategory))
+    } else {
+      fetchArticles()
+    }
+  }
+
+  const handleReset = () => {
+    fetchArticles()
+  }
+
   return (
     <>
       {isLoading && <p>Loading...</p>}
       {error && <p style={{ color: "red" }}>{error}</p>}
-      
+      <div className="article-list">
+        <select value={selectJournalist} onChange={handleSelectJournalist}>
+          <option value="">(Select One)</option>
+          {journalists.map(journalist => 
+           <option value={journalist.id}>{journalist.name}</option>
+          )}
+        </select>
+        <select value={selectCategory} onChange={handleSelectCategory}>
+          <option value="">(Select One)</option>
+          {categories.map(category => 
+           <option value={category.id}>{category.name}</option>
+          )}
+        </select>
+        <div className="article-list">
+          <div className="button-tertiary" onClick={handleApply}>Apply</div>
+          <div className="button-secondary" onClick={handleReset}>Reset</div>
+        </div>
+      </div>
       <div className="article-list">
         {articles.map((article) => (
           <ArticleCard

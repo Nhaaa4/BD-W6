@@ -33,8 +33,23 @@ export const getJournalists = async () => {
   return response.data;
 };
 
+export const getCategories = async () => {
+  const response = await axios.get(`${API_BASE_URL}/categories`);
+  return response.data;
+};
+
 export const getArticlesByJournalist = async (journalistId) => {
   const response = await axios.get(`${API_BASE_URL}/journalists/${journalistId}/articles`);
+  return response.data;
+};
+
+export const getArticlesByCategory = async (categoryId) => {
+  const response = await axios.get(`${API_BASE_URL}/categories/${categoryId}/articles`);
+  return response.data;
+};
+
+export const getArticlesByCategoryAndJournalist = async (categoryId, journalistId) => {
+  const response = await axios.get(`${API_BASE_URL}/articles?categoryId=${categoryId}&journalistId=${journalistId}`);
   return response.data;
 };
 

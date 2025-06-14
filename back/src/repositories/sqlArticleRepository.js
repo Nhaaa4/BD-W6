@@ -11,9 +11,10 @@ export async function getArticles() {
   // TODO
   try {
     const [rows] = await pool.query(
-      "SELECT a.id, a.title, a.content, j.id as journalistId, j.name as journalist, a.category \
+      "SELECT a.id, a.title, a.content, j.id as journalistId, j.name as journalist, c.name as category \
        FROM articles a\
-       JOIN journalists j ON j.id = a.journalistId"
+       JOIN journalists j ON j.id = a.journalistId\
+       JOIN categories c on c.id = a.categoryId"
     );
     return rows;
   } catch (error) {
@@ -27,9 +28,10 @@ export async function getArticleById(id) {
   // TODO
   try {
     const [rows] = await pool.query(
-      `SELECT a.title, a.content, j.id as journalistId, a.category \
+      `SELECT a.title, a.content, j.id as journalistId, c.name as category \
        FROM articles a \
        JOIN journalists j ON j.id = a.journalistId \
+       JOIN categories c on c.id = a.categoryId\
        WHERE a.id = ?`,
       id
     );
@@ -45,7 +47,7 @@ export async function createArticle(article) {
   // TODO
   try {
     return await pool.query(
-      "INSERT INTO articles(title, content, journalistId, category) values (?, ?, ?, ?)",
+      "INSERT INTO articles(title, content, journalistId, categoryId) values (?, ?, ?, ?)",
       [article.title, article.content, article.journalistId, article.category]
     );
   } catch (error) {
@@ -59,7 +61,7 @@ export async function updateArticle(id, updatedData) {
   // TODO
   try {
     return await pool.query(
-      "UPDATE articles SET title = ?, content = ?, journalistId = ?, category = ? WHERE id = ?",
+      "UPDATE articles SET title = ?, content = ?, journalistId = ?, categoryId = ? WHERE id = ?",
       [
         updatedData.title,
         updatedData.content,
@@ -80,6 +82,23 @@ export async function deleteArticle(id) {
     return await pool.query("DELETE FROM articles WHERE id = ?", id);
   } catch (error) {
     console.error("Error Creating Articles: ", error.message);
+    throw error;
+  }
+}
+
+export async function getArticleByCategoryAndJournalist(cId, jId) {
+  try {
+    const [rows] = await pool.query(
+      "SELECT a.id, a.title, a.content, j.id as journalistId, j.name as journalist, c.name as category \
+       FROM articles a\
+       JOIN journalists j ON j.id = a.journalistId\
+       JOIN categories c on c.id = a.categoryId\
+       WHERE c.id = ? AND j.id = ?",
+       [cId, jId]
+    );
+    return rows;
+  } catch (error) {
+    console.error("Error Getting Articles By Journalist and category: ", error.message);
     throw error;
   }
 }

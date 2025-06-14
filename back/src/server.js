@@ -2,6 +2,7 @@ import express, { json } from "express";
 import cors from "cors";
 import articleRouter from "./routes/articleRoutes.js";
 import journalistRoute from "./routes/journalistRoutes.js";
+import categoryRouter from "./routes/categoryRoutes.js";
 
 const app = express();
 
@@ -14,6 +15,7 @@ app.use(json());
 
 app.use("/api/articles", articleRouter);
 app.use("/api/journalists", journalistRoute)
+app.use("/api/categories", categoryRouter)
 
 
 
