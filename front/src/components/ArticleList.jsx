@@ -24,6 +24,7 @@ export default function ArticleList() {
       setArticles(data);
     } catch (err) {
       setError("Failed to load articles. Please try again.");
+      console.error(err)
     } finally {
       setIsLoading(false);
     }
@@ -37,6 +38,7 @@ export default function ArticleList() {
       await fetchArticles(); // refresh the list
     } catch (err) {
       setError("Failed to delete article.");
+      console.error(err)
     } finally {
       setIsLoading(false);
     }

@@ -27,6 +27,7 @@ export default function ArticlesByJournalist() {
       setName(data[0].journalist)
     } catch (err) {
       setError("Failed to load articles. Please try again.");
+      console.error(err)
     } finally {
       setIsLoading(false);
     }
@@ -40,6 +41,7 @@ export default function ArticlesByJournalist() {
       await fetchArticlesByJournalist(); // refresh the list
     } catch (err) {
       setError("Failed to delete article.");
+      console.error(err)
     } finally {
       setIsLoading(false);
     }

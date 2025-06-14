@@ -22,7 +22,7 @@ export default function ArticleForm({ isEdit }) {
       fetchArticle(id);
     }
     fetchJournalist()
-  }, []);
+  }, [isEdit, id]);
 
   const fetchArticle = async (id) => {
     setIsLoading(true);
@@ -32,6 +32,7 @@ export default function ArticleForm({ isEdit }) {
       setFormData(article);
     } catch (err) {
       setError("Failed to load article. Please try again.");
+      console.error(err)
     } finally {
       setIsLoading(false);
     }
@@ -45,6 +46,7 @@ export default function ArticleForm({ isEdit }) {
       setJournalist(journalists);
     } catch (err) {
       setError("Failed to load article. Please try again.");
+      console.error(err)
     } finally {
       setIsLoading(false);
     }
@@ -70,6 +72,7 @@ export default function ArticleForm({ isEdit }) {
       navigate("/articles");
     } catch (err) {
       setError("Failed to submit article.");
+      console.error(err)
     } finally {
       setIsLoading(false);
     }

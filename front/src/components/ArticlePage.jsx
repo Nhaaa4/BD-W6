@@ -10,28 +10,28 @@ export default function ArticlePage() {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    fetchArticle();
-  }, []);
-
-
-  const fetchArticle = async () => {
-    try {
-      setLoading(true);
-
-      const found = await getArticleById(id);
-      if (found) {
-        setArticle(found);
-        setError("");
-      } else {
-        setArticle(null);
-        setError("Article not found.");
+    const fetchArticle = async () => {
+      try {
+        setLoading(true);
+        
+        const found = await getArticleById(id);
+        if (found) {
+          setArticle(found);
+          setError("");
+        } else {
+          setArticle(null);
+          setError("Article not found.");
+        }
+      } catch (err) {
+        setError("Failed to fetch article.");
+        console.error(err)
+      } finally {
+        setLoading(false);
       }
-    } catch (err) {
-      setError("Failed to fetch article.");
-    } finally {
-      setLoading(false);
-    }
-  };
+    };
+  
+    fetchArticle()
+  }, [id]);
 
   if (loading) return <div>Loading article...</div>;
   if (error) return <div>Error: {error}</div>;
