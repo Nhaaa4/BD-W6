@@ -49,8 +49,7 @@ export default function ArticlesByJournalist() {
 
   const handleView = (id) => navigate(`/articles/${id}`);
 
-  const handleViewByJournalist = (id) =>
-    navigate(`/journalists/${id}`);
+  const handleViewByJournalist = (id) => navigate(`/journalists/${id}`);
 
   const handleEdit = (id) => navigate(`/articles/${id}/edit`);
 
