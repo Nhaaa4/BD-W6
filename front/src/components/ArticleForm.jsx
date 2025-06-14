@@ -1,11 +1,12 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { getArticleById, createArticle, updateArticle, getJournalists } from "../services/api";
+import { getArticleById, createArticle, updateArticle, getJournalists, getCategories } from "../services/api";
 
 export default function ArticleForm({ isEdit }) {
   const { id } = useParams();
   const navigate = useNavigate();
   const [journalist,  setJournalist] = useState([])
+  const [categories, setCategories] = useState([]);
 
   const [formData, setFormData] = useState({
     title: "",
@@ -22,6 +23,7 @@ export default function ArticleForm({ isEdit }) {
       fetchArticle(id);
     }
     fetchJournalist()
+    fetchCategories()
   }, [isEdit, id]);
 
   const fetchArticle = async (id) => {
@@ -52,7 +54,19 @@ export default function ArticleForm({ isEdit }) {
     }
   };
 
-
+  const fetchCategories = async () => {
+    setIsLoading(true);
+    setError("");
+    try {
+      const data = await getCategories();
+      setCategories(data);
+    } catch (err) {
+      setError("Failed to load articles. Please try again.");
+      console.error(err)
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -113,13 +127,17 @@ export default function ArticleForm({ isEdit }) {
           )}
         </select>
         <br />
-        <input
-          name="category"
+        <select
+          name="categpry"
           value={formData.category}
           onChange={handleChange}
           placeholder="Category ID"
           required
-        />
+        >
+          {categories.map(categoy => 
+            <option>{categoy.id}</option>
+          )}
+        </select>
         <br />
         <button className="main" type="submit">
           {isEdit ? "Edit " : "Create"}
