@@ -128,14 +128,14 @@ export default function ArticleForm({ isEdit }) {
         </select>
         <br />
         <select
-          name="categpry"
+          name="category"
           value={formData.category}
           onChange={handleChange}
           placeholder="Category ID"
           required
         >
-          {categories.map(categoy => 
-            <option>{categoy.id}</option>
+          {categories.map(category => 
+            <option>{category.id}</option>
           )}
         </select>
         <br />
