@@ -11,7 +11,7 @@ export async function getArticles() {
   // TODO
   try {
     const [rows] = await pool.query(
-      "SELECT a.id, a.title, a.content, j.id as journalistId, j.name as journalist, c.name as category \
+      "SELECT a.id, a.title, a.content, j.id as journalist, c.id as category \
        FROM articles a\
        JOIN journalists j ON j.id = a.journalistId\
        JOIN categories c on c.id = a.categoryId"
@@ -28,7 +28,7 @@ export async function getArticleById(id) {
   // TODO
   try {
     const [rows] = await pool.query(
-      `SELECT a.title, a.content, j.name as journalist, c.name as category \
+      `SELECT a.title, a.content, j.id as journalist, c.id as category \
        FROM articles a \
        JOIN journalists j ON j.id = a.journalistId \
        JOIN categories c on c.id = a.categoryId\
@@ -48,7 +48,7 @@ export async function createArticle(article) {
   try {
     return await pool.query(
       "INSERT INTO articles(title, content, journalistId, categoryId) values (?, ?, ?, ?)",
-      [article.title, article.content, article.journalistId, article.category]
+      [article.title, article.content, article.journalist, article.category]
     );
   } catch (error) {
     console.error("Error Creating Articles: ", error.message);
@@ -65,7 +65,7 @@ export async function updateArticle(id, updatedData) {
       [
         updatedData.title,
         updatedData.content,
-        updatedData.journalistId,
+        updatedData.journalist,
         updatedData.category,
         id,
       ]

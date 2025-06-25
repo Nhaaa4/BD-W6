@@ -11,7 +11,7 @@ export default function ArticleForm({ isEdit }) {
   const [formData, setFormData] = useState({
     title: "",
     content: "",
-    journalistId: "",
+    journalist: "",
     category: "",
   });
 
@@ -116,14 +116,14 @@ export default function ArticleForm({ isEdit }) {
         />
         <br />
         <select
-          name="journalistId"
-          value={formData.journalistId}
+          name="journalist"
+          value={formData.journalist}
           onChange={handleChange}
           placeholder="Journalist ID"
           required
         >
           {journalist.map(journalist => 
-            <option>{journalist.id}</option>
+            <option value={journalist.id}>{journalist.id}</option>
           )}
         </select>
         <br />
@@ -135,7 +135,7 @@ export default function ArticleForm({ isEdit }) {
           required
         >
           {categories.map(category => 
-            <option>{category.id}</option>
+            <option  value={category.id}>{category.id}</option>
           )}
         </select>
         <br />

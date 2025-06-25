@@ -193,7 +193,7 @@ function ArticleCard({ article, onJournalist, onView, onEdit, onDelete }) {
   return (
     <div className="article-card">
       <div className="article-title">{article.title}</div>
-      <div className="article-author" onClick={() => onJournalist(article.journalistId)}>By {article.journalist}</div>
+      <div className="article-author" onClick={() => onJournalist(article.journalist)}>By {article.journalist}</div>
 
       <div className="article-actions">
         <button className="button-tertiary" onClick={() => onEdit(article.id)}>
