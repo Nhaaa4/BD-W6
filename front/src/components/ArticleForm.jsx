@@ -123,7 +123,7 @@ export default function ArticleForm({ isEdit }) {
           required
         >
           {journalist.map(journalist => 
-            <option value={journalist.id}>{journalist.id}</option>
+            <option value={journalist.id}>{journalist.name}</option>
           )}
         </select>
         <br />
@@ -135,7 +135,7 @@ export default function ArticleForm({ isEdit }) {
           required
         >
           {categories.map(category => 
-            <option  value={category.id}>{category.id}</option>
+            <option  value={category.id}>{category.name}</option>
           )}
         </select>
         <br />

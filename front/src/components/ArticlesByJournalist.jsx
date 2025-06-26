@@ -80,7 +80,7 @@ function ArticleCard({ article, onJournalist, onView, onEdit, onDelete }) {
       <div className="article-title">{article.title}</div>
       <div
         className="article-author"
-        onClick={() => onJournalist(article.journalistId)}
+        onClick={() => onJournalist(article.journalist)}
       >
         By {article.journalist}
       </div>

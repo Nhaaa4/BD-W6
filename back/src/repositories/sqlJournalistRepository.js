@@ -13,7 +13,7 @@ export async function getJournalists() {
 export async function getArticleByJournalist(journalistId) {
   try {
     const [rows] = await pool.query(
-      `SELECT a.id, a.title, a.content, j.id as journalistId, j.name as journalist, c.name as category \
+      `SELECT a.id, a.title, a.content, j.id as journalist, c.id as category \
        FROM articles a \
        JOIN journalists j ON j.id = a.journalistId \
        JOIN categories c on c.id = a.categoryId\
